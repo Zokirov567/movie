@@ -65,20 +65,93 @@ searchBtn.addEventListener('click', search)
      
       let response = await sendRequest('https://www.omdbapi.com/', "GET", {"apikey":"b258a1d2", "t": searchQuery})
       if(response.Response == "False") {
-        alert("Фильм не найден")
+        let movie = document.querySelector('.movie')
+        movie.classList.remove('active')
+
+        let error = document.querySelector('.error')
+        error.classList.add('active')
+        error.innerHTML = "Фильм не найден"
+
+        let similar = document.querySelector('.similar')
+        similar.classList.add('.active')
+        similar.innerHTML = ""
+        //similarLine.innerHTML = ""
       } else {
-        alert(response.Title)
+        let error = document.querySelector('.error')
+        error.classList.remove('active')
+        
+
+        showfilm(response)        
+
+        similarResult(searchQuery)
       }
 
-  console.log(response)
+   console.log(response)
 }
 
- 
+ function showfilm(obj) {
+    let movieTitle = document.querySelector('.movieTitle')
+    movieTitle.innerHTML = obj.Title
+    
+    let poster = document.querySelector('.movieCover')
+    poster.setAttribute('src', obj.Poster)
+
+    let movieFullData = document.querySelector('.movieFullData')
+    movieFullData.innerHTML = ""
+
+    let arr = ['Genre', 'Year', 'Relased', 'Runtime', 'Country', 'Writer', 'Type', 'Language', 'Director', 'Plot']
+
+    for(let elem of arr) {
+        if(obj[elem]) {
+        movieFullData.innerHTML = movieFullData.innerHTML +`
+        <div class="movieLine">
+            <div class="lineTitle">
+          ${elem}
+        </div>   
+        <div class="lineData">
+            ${obj[elem]}
+            </div>
+        </div>
+          `
+      }
+    }
 
 
 
 
+    let movie = document.querySelector('.movie')
+    movie.classList.add('active')
+  }
 
+   async function similarResult(query) {
+    let response = await sendRequest('https://www.omdbapi.com/', "GET", {"apikey":"b258a1d2", "s": query})
+    if(response.Response == "False") {
+        let similarLine = document.querySelector('.similarLine')
+        similarLine.innerHTML = 'Похожих фильмов 0'
+        
+   } else {
+    showSimilarfilms(response.Search)
+    let similarLine = document.querySelector('.similarLine')
+    similarLine.innerHTML = `Похожих фильмов ${response.totalResults}`
+   }
+}
+
+   function showSimilarfilms(arr) {
+    let similar = document.querySelector('.similar')
+    similar.innerHTML = ""
+
+    for(let movie of arr) {
+        similar.innerHTML = similar.innerHTML + `
+        <div class="similarMovie">
+        <div class="favorite">
+            <img src="./img/favBtn.svg">
+        </div>
+        <img src="${movie.Poster}">
+        <div class="title">${movie.Title}</div>
+    </div>
+     `
+    }
+   }
 
 
 

@@ -119,12 +119,20 @@ section {
     padding: 10px;
 }
 
-.movieTitle, .similarLine {
+.movieTitle, .similarLine, .error {
     background-color: var(--elem-color);
     padding: 5px;
     border-radius: 5px;
     text-align: center;
     font-weight: bold;
+}
+
+.error {
+    background: rgb(218, 78, 78);
+    display: none;
+}
+.error.active{
+    display: block;
 }
 
 .movieData {
@@ -190,7 +198,12 @@ section {
     position: relative;
     border-radius: 5px;
 }
-
+/* .similar {
+    display: none;
+}
+.similar.active {
+    display: block;
+} */
 .favorite {
     width: 20px;
     height: 20px;
@@ -229,7 +242,12 @@ section {
     backdrop-filter: blur(3px);
 }
 
-
+.movie {
+    display: none;
+}
+.movie.active {
+    display: block;
+}
 
 /* DARK THEME */
 
